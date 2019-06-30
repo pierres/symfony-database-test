@@ -1,0 +1,40 @@
+{
+    "name": "pierres/symfony-database-test",
+    "description": "Symfony WebTestCase with database support",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pierre Schmitz",
+            "email": "mail@pierre-schmitz.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "doctrine/doctrine-bundle": " ^1.11",
+        "doctrine/orm": "^2.6.3",
+        "symfony/browser-kit": "^4.3",
+        "symfony/framework-bundle": "^4.3"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^0.11",
+        "phpstan/phpstan-deprecation-rules": "^0.11",
+        "phpstan/phpstan-phpunit": "^0.11",
+        "phpunit/phpunit": "^8",
+        "squizlabs/php_codesniffer": "^3.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "SymfonyDatabaseTest\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    }
+}
