@@ -122,6 +122,13 @@ class DatabaseTestCase extends WebTestCase
         if (static::isPersistentDatabase()) {
             static::dropDatabase();
         }
+        static::shutdownKernel();
         parent::tearDown();
+    }
+
+    private static function shutdownKernel(): void
+    {
+        static::$client->getKernel()->shutdown();
+        static::$booted = false;
     }
 }
