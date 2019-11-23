@@ -129,6 +129,8 @@ class DatabaseTestCase extends WebTestCase
     private static function shutdownKernel(): void
     {
         static::$client->getKernel()->shutdown();
-        static::$booted = false;
+        if (isset(static::$booted)) {
+            static::$booted = false;
+        }
     }
 }
