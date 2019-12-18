@@ -46,8 +46,8 @@ class DatabaseTestCase extends WebTestCase
     }
 
     /**
-     * @param array $options
-     * @param array $server
+     * @param array<mixed> $options
+     * @param array<mixed> $server
      * @return KernelBrowser
      */
     protected static function createClient(array $options = [], array $server = []): KernelBrowser

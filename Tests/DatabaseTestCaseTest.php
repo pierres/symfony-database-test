@@ -7,7 +7,7 @@ use SymfonyDatabaseTest\DatabaseTestCase;
 
 class DatabaseTestCaseTest extends TestCase
 {
-    public function testInstanciation()
+    public function testInstantiation(): void
     {
         $this->assertInstanceOf(DatabaseTestCase::class, new DatabaseTestCase());
     }
