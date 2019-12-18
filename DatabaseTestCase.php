@@ -2,7 +2,7 @@
 
 namespace SymfonyDatabaseTest;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -31,6 +31,7 @@ class DatabaseTestCase extends WebTestCase
     {
         $container = static::getClient()->getContainer();
         static::assertNotNull($container);
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('doctrine.orm.entity_manager');
         static::assertInstanceOf(EntityManagerInterface::class, $entityManager);
         return $entityManager;
