@@ -2,13 +2,14 @@
 
 namespace SymfonyDatabaseTest;
 
-use Doctrine\Persistence\ObjectRepository;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 
 class DatabaseTestCase extends WebTestCase
 {
@@ -31,8 +32,11 @@ class DatabaseTestCase extends WebTestCase
     {
         $container = static::getClient()->getContainer();
         static::assertNotNull($container);
+        /** @var ManagerRegistry $managerRegistry */
+        $managerRegistry = $container->get('doctrine');
+        static::assertNotNull($managerRegistry);
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = $container->get('doctrine.orm.entity_manager');
+        $entityManager = $managerRegistry->getManager();
         static::assertInstanceOf(EntityManagerInterface::class, $entityManager);
         return $entityManager;
     }
@@ -79,43 +83,33 @@ class DatabaseTestCase extends WebTestCase
 
     private static function dropDatabase(): void
     {
-        static::runCommand(new ArrayInput([
-            'command' => 'doctrine:database:drop',
-            '--force' => true,
-            '--if-exists' => true,
-            '--quiet' => true
-        ]));
-    }
-
-    /**
-     * @param ArrayInput $input
-     */
-    private static function runCommand(ArrayInput $input): void
-    {
-        $application = new Application(static::getClient()->getKernel());
-        $application->setAutoExit(false);
-
-        $output = new BufferedOutput();
-        $result = $application->run($input, $output);
-
-        $outputResult = $output->fetch();
-        static::assertEmpty($outputResult, $outputResult);
-        static::assertEquals(0, $result, sprintf('Command %s failed', $input));
+        $connection = static::getEntityManager()->getConnection();
+        try {
+            $connection->getSchemaManager()->dropDatabase(
+                $connection->getDatabasePlatform()->quoteSingleIdentifier($connection->getDatabase())
+            );
+        } catch (DBALException $e) {
+        }
     }
 
     private static function createDatabase(): void
     {
-        static::runCommand(new ArrayInput([
-            'command' => 'doctrine:database:create'
-        ]));
+        $connection = static::getEntityManager()->getConnection();
+        $params = $connection->getParams();
+        unset($params['dbname'], $params['path'], $params['url']);
+
+        $tmpConnection = DriverManager::getConnection($params);
+
+        $tmpConnection->getSchemaManager()->createDatabase(
+            $tmpConnection->getDatabasePlatform()->quoteSingleIdentifier($connection->getDatabase())
+        );
     }
 
     private static function createDatabaseSchema(): void
     {
-        static::runCommand(new ArrayInput([
-            'command' => 'doctrine:schema:create',
-            '--quiet' => true
-        ]));
+        (new SchemaTool(static::getEntityManager()))->createSchema(
+            static::getEntityManager()->getMetadataFactory()->getAllMetadata()
+        );
     }
 
     protected function tearDown(): void
