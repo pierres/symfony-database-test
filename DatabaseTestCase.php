@@ -17,7 +17,7 @@ class DatabaseTestCase extends WebTestCase
     protected static $client;
 
     /**
-     * @param string $className
+     * @param class-string<mixed> $className
      * @return ObjectRepository
      */
     protected static function getRepository(string $className): ObjectRepository
@@ -98,6 +98,7 @@ class DatabaseTestCase extends WebTestCase
         $params = $connection->getParams();
         unset($params['dbname'], $params['path'], $params['url']);
 
+        /** @phpstan-ignore-next-line */
         $tmpConnection = DriverManager::getConnection($params);
 
         $tmpConnection->getSchemaManager()->createDatabase(
