@@ -36,9 +36,6 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true,
-        "platform": {
-            "php": "7.4.99"
-        }
+        "sort-packages": true
     }
 }
