@@ -2,7 +2,6 @@
 
 namespace SymfonyDatabaseTest;
 
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -14,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class DatabaseTestCase extends WebTestCase
 {
     /** @var KernelBrowser */
-    protected static $client;
+    protected static KernelBrowser $client;
 
     /**
      * @param class-string<mixed> $className
@@ -88,7 +87,7 @@ class DatabaseTestCase extends WebTestCase
             $connection->getSchemaManager()->dropDatabase(
                 $connection->getDatabasePlatform()->quoteSingleIdentifier($connection->getDatabase())
             );
-        } catch (DBALException $e) {
+        } catch (\Exception $e) {
         }
     }
 
