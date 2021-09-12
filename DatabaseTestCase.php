@@ -12,21 +12,16 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DatabaseTestCase extends WebTestCase
 {
-    /** @var KernelBrowser */
     protected static KernelBrowser $client;
 
     /**
      * @param class-string<mixed> $className
-     * @return ObjectRepository
      */
     protected static function getRepository(string $className): ObjectRepository
     {
         return static::getEntityManager()->getRepository($className);
     }
 
-    /**
-     * @return EntityManagerInterface
-     */
     protected static function getEntityManager(): EntityManagerInterface
     {
         $container = static::getClient()->getContainer();
@@ -40,19 +35,11 @@ class DatabaseTestCase extends WebTestCase
         return $entityManager;
     }
 
-    /**
-     * @return KernelBrowser
-     */
     protected static function getClient(): KernelBrowser
     {
         return static::$client;
     }
 
-    /**
-     * @param array<mixed> $options
-     * @param array<mixed> $server
-     * @return KernelBrowser
-     */
     protected static function createClient(array $options = [], array $server = []): KernelBrowser
     {
         return static::getClient();
@@ -71,9 +58,6 @@ class DatabaseTestCase extends WebTestCase
         static::createDatabaseSchema();
     }
 
-    /**
-     * @return bool
-     */
     private static function isPersistentDatabase(): bool
     {
         $params = static::getEntityManager()->getConnection()->getParams();
@@ -97,7 +81,6 @@ class DatabaseTestCase extends WebTestCase
         $params = $connection->getParams();
         unset($params['dbname'], $params['path'], $params['url']);
 
-        /** @phpstan-ignore-next-line */
         $tmpConnection = DriverManager::getConnection($params);
 
         $tmpConnection->getSchemaManager()->createDatabase(
