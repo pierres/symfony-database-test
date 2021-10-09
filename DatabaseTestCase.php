@@ -68,8 +68,8 @@ class DatabaseTestCase extends WebTestCase
     {
         $connection = static::getEntityManager()->getConnection();
         try {
-            $connection->getSchemaManager()->dropDatabase(
-                $connection->getDatabasePlatform()->quoteSingleIdentifier($connection->getDatabase())
+            $connection->createSchemaManager()->dropDatabase(
+                $connection->getDatabasePlatform()->quoteSingleIdentifier($connection->getDatabase() ?? '')
             );
         } catch (\Exception $e) {
         }
@@ -83,8 +83,8 @@ class DatabaseTestCase extends WebTestCase
 
         $tmpConnection = DriverManager::getConnection($params);
 
-        $tmpConnection->getSchemaManager()->createDatabase(
-            $tmpConnection->getDatabasePlatform()->quoteSingleIdentifier($connection->getDatabase())
+        $tmpConnection->createSchemaManager()->createDatabase(
+            $tmpConnection->getDatabasePlatform()->quoteSingleIdentifier($connection->getDatabase() ?? '')
         );
     }
 
