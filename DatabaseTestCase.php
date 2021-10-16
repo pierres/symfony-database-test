@@ -67,9 +67,12 @@ class DatabaseTestCase extends WebTestCase
     private static function dropDatabase(): void
     {
         $connection = static::getEntityManager()->getConnection();
+        $params = $connection->getParams();
+        $dbname =  $params['dbname'];
+
         try {
             $connection->createSchemaManager()->dropDatabase(
-                $connection->getDatabasePlatform()->quoteSingleIdentifier($connection->getDatabase() ?? '')
+                $connection->getDatabasePlatform()->quoteSingleIdentifier($dbname)
             );
         } catch (\Exception $e) {
         }
@@ -79,12 +82,13 @@ class DatabaseTestCase extends WebTestCase
     {
         $connection = static::getEntityManager()->getConnection();
         $params = $connection->getParams();
+        $dbname =  $params['dbname'];
         unset($params['dbname'], $params['path'], $params['url']);
 
         $tmpConnection = DriverManager::getConnection($params);
 
         $tmpConnection->createSchemaManager()->createDatabase(
-            $tmpConnection->getDatabasePlatform()->quoteSingleIdentifier($connection->getDatabase() ?? '')
+            $tmpConnection->getDatabasePlatform()->quoteSingleIdentifier($dbname)
         );
     }
 
