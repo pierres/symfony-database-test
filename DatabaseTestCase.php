@@ -51,11 +51,11 @@ class DatabaseTestCase extends WebTestCase
         static::$client = parent::createClient();
         static::$client->disableReboot();
 
-        if (static::isPersistentDatabase()) {
-            static::dropDatabase();
-            static::createDatabase();
+        if (self::isPersistentDatabase()) {
+            self::dropDatabase();
+            self::createDatabase();
         }
-        static::createDatabaseSchema();
+        self::createDatabaseSchema();
     }
 
     private static function isPersistentDatabase(): bool
@@ -69,6 +69,7 @@ class DatabaseTestCase extends WebTestCase
         $connection = static::getEntityManager()->getConnection();
         $params = $connection->getParams();
         $dbname =  $params['dbname'];
+        static::assertIsString($dbname);
 
         try {
             $connection->createSchemaManager()->dropDatabase(
@@ -83,6 +84,7 @@ class DatabaseTestCase extends WebTestCase
         $connection = static::getEntityManager()->getConnection();
         $params = $connection->getParams();
         $dbname =  $params['dbname'];
+        static::assertIsString($dbname);
         unset($params['dbname'], $params['path'], $params['url']);
 
         $tmpConnection = DriverManager::getConnection($params);
@@ -101,10 +103,10 @@ class DatabaseTestCase extends WebTestCase
 
     protected function tearDown(): void
     {
-        if (static::isPersistentDatabase()) {
-            static::dropDatabase();
+        if (self::isPersistentDatabase()) {
+            self::dropDatabase();
         }
-        static::shutdownKernel();
+        self::shutdownKernel();
         parent::tearDown();
     }
 
