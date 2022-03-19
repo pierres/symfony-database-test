@@ -68,6 +68,7 @@ class DatabaseTestCase extends WebTestCase
     {
         $connection = static::getEntityManager()->getConnection();
         $params = $connection->getParams();
+        static::assertArrayHasKey('dbname', $params);
         $dbname =  $params['dbname'];
         static::assertIsString($dbname);
 
@@ -83,9 +84,11 @@ class DatabaseTestCase extends WebTestCase
     {
         $connection = static::getEntityManager()->getConnection();
         $params = $connection->getParams();
+        static::assertArrayHasKey('dbname', $params);
+        static::assertArrayHasKey('path', $params);
         $dbname =  $params['dbname'];
         static::assertIsString($dbname);
-        unset($params['dbname'], $params['path'], $params['url']);
+        unset($params['dbname'], $params['path']);
 
         $tmpConnection = DriverManager::getConnection($params);
 
