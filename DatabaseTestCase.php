@@ -82,14 +82,14 @@ class DatabaseTestCase extends WebTestCase
 
     private static function createDatabase(): void
     {
+        // @see Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand
         $connection = static::getEntityManager()->getConnection();
         $params = $connection->getParams();
         static::assertArrayHasKey('dbname', $params);
-        static::assertArrayHasKey('path', $params);
         $dbname =  $params['dbname'];
         static::assertIsString($dbname);
-        unset($params['dbname'], $params['path']);
-
+        // @phpstan-ignore-next-line
+        unset($params['dbname'], $params['path'], $params['url']);
         $tmpConnection = DriverManager::getConnection($params);
 
         $tmpConnection->createSchemaManager()->createDatabase(
