@@ -15,7 +15,7 @@ class DatabaseTestCase extends WebTestCase
     protected static KernelBrowser $client;
 
     /**
-     * @param class-string<mixed> $className
+     * @param class-string<object> $className
      */
     protected static function getRepository(string $className): ObjectRepository
     {
