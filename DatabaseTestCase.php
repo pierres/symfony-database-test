@@ -90,6 +90,7 @@ class DatabaseTestCase extends WebTestCase
         static::assertIsString($dbname);
         // @phpstan-ignore-next-line
         unset($params['dbname'], $params['path'], $params['url']);
+        // @phpstan-ignore-next-line
         $tmpConnection = DriverManager::getConnection($params);
 
         $tmpConnection->createSchemaManager()->createDatabase(
