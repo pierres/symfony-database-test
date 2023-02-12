@@ -9,6 +9,6 @@ class DatabaseTestCaseTest extends TestCase
 {
     public function testInstantiation(): void
     {
-        $this->assertInstanceOf(DatabaseTestCase::class, new DatabaseTestCase());
+        $this->assertInstanceOf(DatabaseTestCase::class, new DatabaseTestCase(DatabaseTestCase::class));
     }
 }
