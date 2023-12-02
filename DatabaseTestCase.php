@@ -9,6 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\BrowserKit\AbstractBrowser;
 
 class DatabaseTestCase extends WebTestCase
 {
@@ -35,9 +36,9 @@ class DatabaseTestCase extends WebTestCase
         return $entityManager;
     }
 
-    protected static function getClient(): KernelBrowser
+    protected static function getClient(AbstractBrowser $newClient = null): KernelBrowser
     {
-        return static::$client;
+        return $newClient instanceof KernelBrowser ? $newClient : static::$client;
     }
 
     protected static function createClient(array $options = [], array $server = []): KernelBrowser
