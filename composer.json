@@ -14,8 +14,8 @@
         "doctrine/dbal": "^3.0",
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/orm": "^2.8",
-        "symfony/browser-kit": "^6.0",
-        "symfony/framework-bundle": "^6.0"
+        "symfony/browser-kit": "^6.0|^7.0",
+        "symfony/framework-bundle": "^6.0|^7.0"
     },
     "require-dev": {
         "phpstan/extension-installer": "^1.2.0",
