@@ -10,6 +10,8 @@ use Doctrine\Persistence\ObjectRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\AbstractBrowser;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class DatabaseTestCase extends WebTestCase
 {
@@ -17,6 +19,7 @@ class DatabaseTestCase extends WebTestCase
 
     /**
      * @param class-string<object> $className
+     * @return ObjectRepository<object>
      */
     protected static function getRepository(string $className): ObjectRepository
     {
@@ -26,21 +29,25 @@ class DatabaseTestCase extends WebTestCase
     protected static function getEntityManager(): EntityManagerInterface
     {
         $container = static::getClient()->getContainer();
-        static::assertNotNull($container);
-        /** @var ManagerRegistry $managerRegistry */
         $managerRegistry = $container->get('doctrine');
-        static::assertNotNull($managerRegistry);
-        /** @var EntityManagerInterface $entityManager */
+        static::assertInstanceOf(ManagerRegistry::class, $managerRegistry);
         $entityManager = $managerRegistry->getManager();
         static::assertInstanceOf(EntityManagerInterface::class, $entityManager);
         return $entityManager;
     }
 
-    protected static function getClient(AbstractBrowser $newClient = null): KernelBrowser
+    /**
+     * @param AbstractBrowser<Request, Response>|null $newClient
+     */
+    protected static function getClient(?AbstractBrowser $newClient = null): KernelBrowser
     {
         return $newClient instanceof KernelBrowser ? $newClient : static::$client;
     }
 
+    /**
+     * @param array<string, string> $options
+     * @param array<string, string> $server
+     */
     protected static function createClient(array $options = [], array $server = []): KernelBrowser
     {
         return static::getClient();

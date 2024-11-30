@@ -4,6 +4,9 @@ parameters:
 	    - .
 	excludePaths:
 		- vendor
-	checkGenericClassInNonGenericObjectType: false
 	reportUnmatchedIgnoredErrors: false
-	checkMissingIterableValueType: false
+	treatPhpDocTypesAsCertain: false
+	ignoreErrors:
+		-
+			identifier: generics.notGeneric
+			path: DatabaseTestCase.php
