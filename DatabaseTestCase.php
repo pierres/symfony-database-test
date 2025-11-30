@@ -69,7 +69,7 @@ class DatabaseTestCase extends WebTestCase
     private static function isPersistentDatabase(): bool
     {
         $params = static::getEntityManager()->getConnection()->getParams();
-        return !empty($params['path']) || !empty($params['dbname']);
+        return !empty($params['dbname']);
     }
 
     private static function dropDatabase(): void
